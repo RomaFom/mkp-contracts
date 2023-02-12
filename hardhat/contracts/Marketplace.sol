@@ -57,7 +57,7 @@ contract Marketplace is ReentrancyGuard {
         emit Offered(itemCount,address(_nft),_tokenId,_price,msg.sender);
     }
 
-    function listItem(uint _itemId,uint _price) external nonReentrant{
+    function listItem(uint _itemId, uint _price) external nonReentrant{
         require(items[_itemId].nft.ownerOf(items[_itemId].tokenId) == msg.sender,"You must own the token to list it");
         require(items[_itemId].isSold == true,"Item is already sold");
         require(_price > 0,"Price must be greater than 0");
@@ -92,6 +92,11 @@ contract Marketplace is ReentrancyGuard {
         //emit
         emit Bought(_itemId,address(item.nft),item.tokenId,item.price,item.seller,msg.sender);
     }
+
+    function getItemOwner(uint _itemId) external view returns(address){
+        return items[_itemId].nft.ownerOf(items[_itemId].tokenId);
+    }
+
     function getFinalPrice(uint _itemId) view public returns(uint){
         return(items[_itemId].listingPrice*(100+feePercent)/100);
     }
